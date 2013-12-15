@@ -1,0 +1,16 @@
+{
+  "name": "nacl-bridge",
+  "version": "0.0.1",
+  "authors": [
+    "Johan Öbrink <johan.obrink@gmail.com>"
+  ],
+  "description": "A bridge for calling into nacl with callbacks and for nacl to call into JS",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

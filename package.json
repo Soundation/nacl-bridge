@@ -1,0 +1,27 @@
+{
+  "name": "nacl-bridge",
+  "version": "0.0.1",
+  "description": "A bridge for calling into nacl with callbacks and for nacl to call into JS",
+  "main": "nacl-bridge.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johan Öbrink",
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "~0.10.8",
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.1",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.1",
+    "karma-mocha": "~0.1.1",
+    "karma-chai": "0.0.2",
+    "karma-sinon": "~1.0.0",
+    "karma-sinon-chai": "~0.1.4",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-connect": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-karma": "~0.6.2"
+  }
+}

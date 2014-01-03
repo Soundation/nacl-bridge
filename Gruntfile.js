@@ -12,7 +12,7 @@ module.exports = function (grunt) {
         browser: true,
         globals: {
           jQuery: true
-        },
+        }
       },
       files: ['nacl-bridge.js']
     },
@@ -27,10 +27,21 @@ module.exports = function (grunt) {
         singleRun: true,
         browsers: ['PhantomJS']
       },
+    },
+
+    watch: {
+      scripts: {
+        files: ['nacl-bridge.js'],
+        tasks: ['jshint'],
+        options: {
+          spawn: false
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', ['jshint', 'karma']);

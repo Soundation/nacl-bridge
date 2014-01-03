@@ -189,6 +189,18 @@ describe('nacl-bridge', function() {
     beforeEach(function() {
       bridge = nacl(element);
     });
-    it('works');
+    it('removes all listeners for a specific type', function() {
+      bridge.on('foo', function() {});
+      bridge.on('bar', function() {});
+      bridge.removeAllEventListeners('foo');
+      expect(bridge.listeners['foo']).to.be.undefined;
+      expect(bridge.listeners['bar']).to.be.instanceof(Array);
+    });
+    it('removes all listeners for all types', function() {
+      bridge.on('foo', function() {});
+      bridge.on('bar', function() {});
+      bridge.removeAllEventListeners();
+      expect(bridge.listeners).to.be.eql({});
+    });
   });
 });

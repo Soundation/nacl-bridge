@@ -117,5 +117,13 @@
     }
   };
 
+  Bridge.prototype.removeAllEventListeners = function(event) {
+    if('string' !== typeof event) {
+      this.listeners = {};
+    } else {
+      delete this.listeners[event];
+    }
+  };
+
 
 }(window));

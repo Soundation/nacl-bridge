@@ -10,6 +10,7 @@
     this.element = element;
     this.calls = {};
     this.callCounter = 0;
+    this.listeners = {};
 
     var self = this;
 
@@ -54,27 +55,36 @@
       if((msg.type === 'success' || msg.type === 'error') && 'function' !== typeof call.status) {
         delete this.calls[msg.id];
       }
+    } else if('string' === typeof msg.event) {
+      if(this.listeners[msg.event] instanceof Array) {
+        this.listeners[msg.event].forEach(function(listener) {
+          listener.call(null, msg.data);
+        });
+      }
     }
   };
 
   Bridge.prototype.exec = function(data, success, fail, status) {
 
-    var callObject = {
-      success: success,
-      fail: fail,
-      status: status
-    };
-
     var id = ++this.callCounter;
     var self = this;
-    this.calls[id] = callObject;
+
+    if('function' === typeof success || 'function' === typeof fail || 'function' === typeof status) {
+      this.calls[id] = {
+        success: success,
+        fail: fail,
+        status: status
+      };
+    }
+
     var op = {
       cancel: function() {
         delete self.calls[id];
         if(self.pending instanceof Array) {
           self.pending = self.pending.filter(function(arg) { return arg.id !== id; });
+        } else {
+          self.element.postMessage({ cancel: id });
         }
-        self.element.postMessage({ cancel: id });
       }
     };
 
@@ -88,5 +98,24 @@
 
     return op;
   };
+
+  Bridge.prototype.addEventListener = Bridge.prototype.on = function(event, listener) {
+    if(!(this.listeners[event] instanceof Array)) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(listener);
+  };
+
+  Bridge.prototype.removeEventListener = Bridge.prototype.off = function(event, listener) {
+    if(this.listeners[event] instanceof Array) {
+      this.listeners[event] = this.listeners[event].filter(function(l) {
+        return l !== listener;
+      });
+      if(!this.listeners[event].length) {
+        delete this.listeners[event];
+      }
+    }
+  };
+
 
 }(window));

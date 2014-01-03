@@ -30,7 +30,7 @@ describe('nacl-bridge', function() {
     bridge.exec(1).cancel();
     bridge.exec(2);
     element.addEventListener.withArgs('load').yield();
-    
+
     expect(element.postMessage.withArgs({ id: 1, data: 1 })).not.called;
     expect(element.postMessage.withArgs({ id: 2, data: 2 })).calledOnce;
   });
@@ -129,10 +129,66 @@ describe('nacl-bridge', function() {
     });
   });
 
-  describe('#addEventListener', function() {
+  describe('#addEventListener / #on', function() {
     beforeEach(function() {
       bridge = nacl(element);
     });
+    it('adds a listener for the specified event', function() {
+      var listener1 = sinon.spy();
+      var listener2 = sinon.spy();
 
+      bridge.addEventListener('foo', listener1);
+      expect(bridge.listeners['foo']).to.eql([listener1]);
+
+      bridge.on('foo', listener2);
+      expect(bridge.listeners['foo']).to.eql([listener1, listener2]);
+    });
+    it('calls all handlers when an event is recieved from NaCl', function() {
+      var listener = sinon.spy();
+      bridge.addEventListener('foo', listener);
+      element.addEventListener.withArgs('message').yield({ event: 'foo', data: { bar: 1 }});
+      expect(listener).calledOnce;
+      expect(listener).calledWith({ bar: 1 });
+    });
+  });
+
+  describe('#removeEventListener / #off', function() {
+    beforeEach(function() {
+      bridge = nacl(element);
+    });
+    it('adds a listener for the specified event', function() {
+      var listener1 = sinon.spy();
+      var listener2 = sinon.spy();
+
+      bridge.addEventListener('foo', listener1);
+      bridge.on('foo', listener2);
+      expect(bridge.listeners['foo']).to.eql([listener1, listener2]);
+
+      bridge.removeEventListener('foo', listener1);
+      expect(bridge.listeners['foo']).to.eql([listener2]);
+
+      bridge.off('foo', listener2);
+      expect(bridge.listeners['foo']).to.be.undefined;
+    });
+    it('calls all handlers when an event is recieved from NaCl', function() {
+      var listener1 = sinon.spy();
+      var listener2 = sinon.spy();
+      bridge.addEventListener('foo', listener1);
+      bridge.on('foo', listener2);
+
+      element.addEventListener.withArgs('message').yield({ event: 'foo', data: { bar: 1 }});
+
+      expect(listener1).calledOnce;
+      expect(listener1).calledWith({ bar: 1 });
+      expect(listener2).calledOnce;
+      expect(listener2).calledWith({ bar: 1 });
+    });
+  });
+
+  describe('#removeAllEventListeners', function() {
+    beforeEach(function() {
+      bridge = nacl(element);
+    });
+    it('works');
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "nacl-bridge",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A bridge for calling into nacl with callbacks and for nacl to call into JS",
   "main": "nacl-bridge.js",
   "scripts": {

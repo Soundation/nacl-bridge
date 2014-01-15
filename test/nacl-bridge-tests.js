@@ -150,6 +150,13 @@ describe('nacl-bridge', function() {
       expect(listener).calledOnce;
       expect(listener).calledWith({ bar: 1 });
     });
+    it('can handle String object values', function() {
+      var listener = sinon.spy();
+      bridge.addEventListener('foo', listener);
+      element.addEventListener.withArgs('message').yield({ data: { event: new String('foo'), data: { bar: 1 }}});
+      expect(listener).calledOnce;
+      expect(listener).calledWith({ bar: 1 });
+    });
   });
 
   describe('#removeEventListener / #off', function() {

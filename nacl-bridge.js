@@ -33,7 +33,9 @@
     }
   };
 
-  Bridge.prototype.onMessage = function(msg) {
+  Bridge.prototype.onMessage = function(event) {
+    var msg = event.data;
+    
     if(msg && msg.id && msg.type) {
 
       // callback

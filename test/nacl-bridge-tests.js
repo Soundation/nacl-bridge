@@ -66,14 +66,14 @@ describe('nacl-bridge', function() {
       var success = sinon.spy();
       bridge.exec({}, success);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'success', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'success', data: 5 } });
       expect(success.withArgs(5)).calledOnce;
     });
     it('removes listener if success is called and no status listener is supplied', function() {
       var success = sinon.spy();
       bridge.exec({}, success);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'success', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'success', data: 5 } });
       expect(bridge.calls).to.not.have.key('1');
     });
     it('calls fail with correct parameters', function() {
@@ -81,7 +81,7 @@ describe('nacl-bridge', function() {
       var fail = sinon.spy();
       bridge.exec({}, success, fail);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'error', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'error', data: 5 } });
       expect(success).not.called;
       expect(fail.withArgs(5)).calledOnce;
     });
@@ -89,7 +89,7 @@ describe('nacl-bridge', function() {
       var success = sinon.spy();
       bridge.exec({}, success);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'error', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'error', data: 5 } });
       expect(bridge.calls).to.not.have.key('1');
     });
     it('calls status with correct parameters', function() {
@@ -98,7 +98,7 @@ describe('nacl-bridge', function() {
       var status = sinon.spy();
       bridge.exec({}, success, fail, status);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'status', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'status', data: 5 } });
       expect(success).not.called;
       expect(fail).not.called;
       expect(status.withArgs(5)).calledOnce;
@@ -108,7 +108,7 @@ describe('nacl-bridge', function() {
       var status = sinon.spy();
       bridge.exec({}, success, null, status);
       expect(bridge.calls).to.have.key('1');
-      element.addEventListener.withArgs('message').yield({ id: 1, type: 'error', data: 5 });
+      element.addEventListener.withArgs('message').yield({ data: { id: 1, type: 'error', data: 5 } });
       expect(bridge.calls).to.have.key('1');
     });
     it('returns an object to cancel the operation', function() {
@@ -146,7 +146,7 @@ describe('nacl-bridge', function() {
     it('calls all handlers when an event is recieved from NaCl', function() {
       var listener = sinon.spy();
       bridge.addEventListener('foo', listener);
-      element.addEventListener.withArgs('message').yield({ event: 'foo', data: { bar: 1 }});
+      element.addEventListener.withArgs('message').yield({ data: { event: 'foo', data: { bar: 1 }}});
       expect(listener).calledOnce;
       expect(listener).calledWith({ bar: 1 });
     });
@@ -176,7 +176,7 @@ describe('nacl-bridge', function() {
       bridge.addEventListener('foo', listener1);
       bridge.on('foo', listener2);
 
-      element.addEventListener.withArgs('message').yield({ event: 'foo', data: { bar: 1 }});
+      element.addEventListener.withArgs('message').yield({ data: { event: 'foo', data: { bar: 1 }}});
 
       expect(listener1).calledOnce;
       expect(listener1).calledWith({ bar: 1 });

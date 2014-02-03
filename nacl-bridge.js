@@ -34,30 +34,33 @@
   };
 
   Bridge.prototype.onMessage = function(event) {
-    var msg = JSON.parse(JSON.stringify(event.data));
+
+    var msg = event.data;
 
     if(msg && msg.id && msg.type) {
 
       // callback
       var call = this.calls[msg.id];
+
       if(!call) {
+        console.log("nop");
         return;
       }
 
       // handle callbacks
-      if(msg.type === 'success' && 'function' === typeof call.success) {
+      if(msg.type == 'success' && 'function' === typeof call.success) {
         call.success.call(null, msg.data);
-      } else if(msg.type === 'error' && 'function' === typeof call.fail) {
+      } else if(msg.type == 'error' && 'function' === typeof call.fail) {
         call.fail.call(null, msg.data);
-      } else if(msg.type === 'status' && 'function' === typeof call.status) {
+      } else if(msg.type == 'status' && 'function' === typeof call.status) {
         call.status.call(null, msg.data);
       }
 
       // remove listeners
-      if((msg.type === 'success' || msg.type === 'error') && 'function' !== typeof call.status) {
+      if((msg.type == 'success' || msg.type == 'error') && 'function' !== typeof call.status) {
         delete this.calls[msg.id];
       }
-    } else if('string' === typeof msg.event) {
+    } else if(msg.event instanceof String) {
       if(this.listeners[msg.event] instanceof Array) {
         this.listeners[msg.event].forEach(function(listener) {
           listener.call(null, msg.data);

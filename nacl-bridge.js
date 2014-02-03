@@ -60,7 +60,7 @@
       if((msg.type == 'success' || msg.type == 'error') && 'function' !== typeof call.status) {
         delete this.calls[msg.id];
       }
-    } else if(msg.event instanceof String) {
+    } else if(msg.event) {
       if(this.listeners[msg.event] instanceof Array) {
         this.listeners[msg.event].forEach(function(listener) {
           listener.call(null, msg.data);

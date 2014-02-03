@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         curly: true,
-        eqeqeq: true,
+        eqeqeq: false,
         eqnull: true,
         browser: true,
         globals: {

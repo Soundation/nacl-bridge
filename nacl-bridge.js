@@ -8,7 +8,7 @@
     this.type = type.valueOf();
     this.timeStamp = new Date().getTime();
     this.bubbles = canBubble || false;
-    this.cancelBubble = canBubble || false;
+    this.cancelBubble = !canBubble;
     this.cancelable = cancelable || false;
     this.defaultPrevented = false;
     if(details) {

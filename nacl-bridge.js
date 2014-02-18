@@ -2,6 +2,27 @@
 
   'use strict';
 
+  var BridgeEvent = function MyEvent(bridge, element, type, canBubble, cancelable, details) {
+    this.target = bridge;
+    this.srcElement = element;
+    this.type = type.valueOf();
+    this.timeStamp = new Date().getTime();
+    this.bubbles = canBubble || false;
+    this.cancelBubble = canBubble || false;
+    this.cancelable = cancelable || false;
+    this.defaultPrevented = false;
+    if(details) {
+      if('object' === typeof details && !(details instanceof Array)) {
+        var self = this;
+        Object.keys(details).forEach(function (key) {
+          self[key] = details[key];
+        });
+      } else {
+        this.details = details;
+      }
+    }
+  };
+
   var nacl = window.nacl = function nacl(element, loaded) {
     return new Bridge(element, loaded);
   };
@@ -61,9 +82,11 @@
         delete this.calls[msg.id];
       }
     } else if(msg.event) {
+      var target = this.element;
+      var self = this;
       if(this.listeners[msg.event] instanceof Array) {
         this.listeners[msg.event].forEach(function(listener) {
-          listener.call(null, msg.data);
+          listener.call(self, new BridgeEvent(self, self.element, msg.event, true, true, msg.data));
         });
       }
     }

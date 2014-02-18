@@ -176,6 +176,20 @@ message.Set(pp::Var("data"), data);
 PostMessage(message);
 ```
 
-This will call all javascript event listeners for the event "foo" with the data { bar: 2 }
+This will call all javascript event listeners for the event "foo" with the event:
+
+```JavaScript
+{
+  type: 'foo',
+  target: bridge,
+  srcElement: embedElement,
+  bar: 2,
+  timestamp: new Date().getTime(),
+  bubbles: true,
+  cancelBubble: false,
+  cancelable: true,
+  defaultPrevented: false
+}
+```
 
 

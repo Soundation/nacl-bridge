@@ -148,14 +148,22 @@ describe('nacl-bridge', function() {
       bridge.addEventListener('foo', listener);
       element.addEventListener.withArgs('message').yield({ data: { event: 'foo', data: { bar: 1 }}});
       expect(listener).calledOnce;
-      expect(listener).calledWith({ bar: 1 });
+      var evt = listener.getCall(0).args[0];
+      expect(evt.type, 'type').to.equal('foo');
+      expect(evt.target, 'target').to.equal(bridge);
+      expect(evt.srcElement, 'srcElement').to.equal(element);
+      expect(evt.bar, 'bar').to.eql(1);
     });
     it('can handle String object values', function() {
       var listener = sinon.spy();
       bridge.addEventListener('foo', listener);
       element.addEventListener.withArgs('message').yield({ data: { event: new String('foo'), data: { bar: 1 }}});
       expect(listener).calledOnce;
-      expect(listener).calledWith({ bar: 1 });
+      var evt = listener.getCall(0).args[0];
+      expect(evt.type, 'type').to.equal('foo');
+      expect(evt.target, 'target').to.equal(bridge);
+      expect(evt.srcElement, 'srcElement').to.equal(element);
+      expect(evt.bar, 'bar').to.eql(1);
     });
   });
 
@@ -163,7 +171,7 @@ describe('nacl-bridge', function() {
     beforeEach(function() {
       bridge = nacl(element);
     });
-    it('adds a listener for the specified event', function() {
+    it('removes a listener for the specified event', function() {
       var listener1 = sinon.spy();
       var listener2 = sinon.spy();
 
@@ -176,19 +184,6 @@ describe('nacl-bridge', function() {
 
       bridge.off('foo', listener2);
       expect(bridge.listeners['foo']).to.be.undefined;
-    });
-    it('calls all handlers when an event is recieved from NaCl', function() {
-      var listener1 = sinon.spy();
-      var listener2 = sinon.spy();
-      bridge.addEventListener('foo', listener1);
-      bridge.on('foo', listener2);
-
-      element.addEventListener.withArgs('message').yield({ data: { event: 'foo', data: { bar: 1 }}});
-
-      expect(listener1).calledOnce;
-      expect(listener1).calledWith({ bar: 1 });
-      expect(listener2).calledOnce;
-      expect(listener2).calledWith({ bar: 1 });
     });
   });
 

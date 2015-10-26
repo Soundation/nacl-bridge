@@ -106,6 +106,7 @@
     }
 
     var op = {
+      id: id,
       cancel: function() {
         delete self.calls[id];
         if(self.pending instanceof Array) {

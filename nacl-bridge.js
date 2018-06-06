@@ -81,7 +81,7 @@
       if((msg.type == 'success' || msg.type == 'error') && 'function' !== typeof call.status) {
         delete this.calls[msg.id];
       }
-    } else if(msg.event) {
+    } else if(msg && msg.event) {
       var target = this.element;
       var self = this;
       if(this.listeners[msg.event] instanceof Array) {
